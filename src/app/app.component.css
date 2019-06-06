@@ -1,3 +1,106 @@
-div {
-    border: 2px solid purple;
+h1 {
+  color: gray;
+  background-color: black;
+    width: 28%;
+    padding: 15px;
+    border-radius: 16px;
+    margin: 2%;
+}
+
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    position: relative;
+    left: 37%;
+    padding: 3%;
+    background-color: rgb(0,0,0, 0.7);
+    color: gray;
+    margin-bottom: 10px;
+    border-radius: 7px;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    right: 2%;
+    width: 65%;
+}
+
+
+.entries {
+    border: 2px solid black;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    left: 39%;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: rgb(169,169,169, 0.7);
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.delete {
+    margin-bottom: 8px;
+}
+
+.add {
+    margin-top: 12px;
+    padding: 3px;
+    background-color: gray;
+    border-radius: 5px;
+    color: aliceblue;
+    border: 2px solid black;
+}
+
+.delete {
+    width: 9%;
+    position: relative;
+    left: 88%;
+    bottom: 250px;
+    color: gray;
+    background-color: black;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.edit {
+    color: gray;
+    background-color: black;
+    border-radius: 8px;
+    padding: 3px;
+    font-weight: bold;
+}
+
+.updateForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.save1 {
+    color: gray;
+    background-color: black;
+    border-radius: 8px;
+    padding: 3px;
+    font-weight: bold;
+    margin-top: 11px;
+}
+
+input {
+    padding: 3px;
+    border-radius: 6px
+}
+
+label {
+    font-size: 20px;
+}
+
+p {
+    font-size: 20px;
 }

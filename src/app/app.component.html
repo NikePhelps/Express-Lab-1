@@ -1,23 +1,34 @@
-<h1>List of Items</h1>
+<h1>NikePhelps' Shopping Cart</h1>
 
-<form #itemForm="ngForm" (ngSubmit)="addItems(itemForm.value.newID, itemForm.value.newProduct, 
-itemForm.value.newPrice, itemForm.value.newQuantity)">
-    <label for="">ID</label>
-    <input type="text" ngModel name="newID">
+<form class="form" #itemForm="ngForm" (ngSubmit)="addNewItem(itemForm)">
     <label for="">Product</label>
-    <input type="text" ngModel name="newProduct">
+    <input type="text" ngModel name="product">
     <label for="">Price</label>
-    <input type="text" ngModel name="newPrice">
+    <input type="text" ngModel name="price">
     <label for="">Quantity</label>
-    <input type="text" ngModel name="newQuantity">
-    <button>Add Item</button>
+    <input type="text" ngModel name="quantity">
+    <button class="add">Add Item</button>
 </form>
-
-<div *ngFor="let item of cartItems">
+<section>
+<div class="entries" *ngFor="let item of cartItems; index as i">
   <p>ID: {{ item.id }}</p>
   <p>Product: {{ item.product }}</p>
   <p>Price: {{ item.price }}</p>
   <p>Quantity: {{ item.quantity }}</p>
-  <button (click)="deleteItem(item.id)">X</button>
-</div>
+  <button class="delete" (click)="deleteAnItem(item.id)">X</button>
+  <button class="edit" (click)="toggleForm(i)">Edit</button>
 
+
+<form class="updateForm" *ngIf="item.beingUpdated" #updateForm="ngForm" (ngSubmit)="[updateAnItem(item), toggleForm(i)]">
+  <label for="">ID</label>
+  <input type="text" [(ngModel)]="item.id" name="id">
+  <label for="">Product</label>
+  <input type="text" [(ngModel)]="item.product" name="product">
+  <label for="">Price</label>
+  <input type="text" [(ngModel)]="item.price" name="price">
+  <label for="">Quantity</label>
+  <input type="text" [(ngModel)]="item.quantity" name="quantity">
+  <button class="save1">Save Item</button>
+  </form>
+</div>
+</section>

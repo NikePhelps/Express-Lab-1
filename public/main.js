@@ -41,7 +41,7 @@ module.exports = "div {\r\n    border: 2px solid purple;\r\n}\r\n/*# sourceMappi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>List of Items</h1>\n\n<form #itemForm=\"ngForm\" (ngSubmit)=\"addItems(itemForm.value.newID, itemForm.value.newProduct, \nitemForm.value.newPrice, itemForm.value.newQuantity)\">\n    <label for=\"\">ID</label>\n    <input type=\"text\" ngModel name=\"newID\">\n    <label for=\"\">Product</label>\n    <input type=\"text\" ngModel name=\"newProduct\">\n    <label for=\"\">Price</label>\n    <input type=\"text\" ngModel name=\"newPrice\">\n    <label for=\"\">Quantity</label>\n    <input type=\"text\" ngModel name=\"newQuantity\">\n    <button>Add Item</button>\n</form>\n\n<div *ngFor=\"let item of cartItems\">\n  <p>ID: {{ item.id }}</p>\n  <p>Product: {{ item.product }}</p>\n  <p>Price: {{ item.price }}</p>\n  <p>Quantity: {{ item.quantity }}</p>\n  <button (click)=\"deleteItem(item.id)\">X</button>\n</div>\n\n"
+module.exports = "<h1>List of Items</h1>\n\n<form #itemForm=\"ngForm\" (ngSubmit)=\"addNewItem(itemForm)\">\n    <label for=\"\">ID</label>\n    <input type=\"text\" ngModel name=\"id\">\n    <label for=\"\">Product</label>\n    <input type=\"text\" ngModel name=\"product\">\n    <label for=\"\">Price</label>\n    <input type=\"text\" ngModel name=\"price\">\n    <label for=\"\">Quantity</label>\n    <input type=\"text\" ngModel name=\"quantity\">\n    <button>Add Item</button>\n</form>\n\n<div *ngFor=\"let item of cartItems; index as i\">\n  <p>ID: {{ item.id }}</p>\n  <p>Product: {{ item.product }}</p>\n  <p>Price: {{ item.price }}</p>\n  <p>Quantity: {{ item.quantity }}</p>\n  <button (click)=\"toggleForm(i)\">Edit</button>\n  <button (click)=\"deleteAnItem(item.id)\">X</button>\n\n\n<form *ngIf=\"item.beingUpdated\" #updateForm=\"ngForm\" (ngSubmit)=\"[updateAnItem(item), toggleForm(i)]\">\n  <label for=\"\">ID</label>\n  <input type=\"text\" [(ngModel)]=\"item.id\" name=\"id\">\n  <label for=\"\">Product</label>\n  <input type=\"text\" [(ngModel)]=\"item.product\" name=\"product\">\n  <label for=\"\">Price</label>\n  <input type=\"text\" [(ngModel)]=\"item.price\" name=\"price\">\n  <label for=\"\">Quantity</label>\n  <input type=\"text\" [(ngModel)]=\"item.quantity\" name=\"quantity\">\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -66,33 +66,33 @@ var AppComponent = /** @class */ (function () {
         var _this = this;
         this.cartService = cartService;
         this.title = 'expresslab';
-        this.cartItems = [
-            {
-                id: 0,
-                product: "shirt",
-                price: 80,
-                quantity: 2
-            },
-            {
-                id: 1,
-                product: "jeans",
-                price: 100,
-                quantity: 1
-            },
-        ];
+        this.shouldBeHidden = true;
         this.cartService.getAllItems().subscribe(function (response) {
             _this.cartItems = response;
         });
     }
-    AppComponent.prototype.addNewAnimal = function (newID, newProduct, newPrice, newQuantity) {
+    AppComponent.prototype.toggleForm = function (index) {
+        this.cartItems[index].beingUpdated = !this.cartItems[index].beingUpdated;
+        console.log(this.cartItems[index]);
+        this.shouldBeHidden = !this.shouldBeHidden;
+    };
+    AppComponent.prototype.addNewItem = function (form) {
         var _this = this;
-        this.cartService.addItems(newID, newProduct, newPrice, newQuantity).subscribe(function (response) {
+        this.cartService
+            .addItems(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"]({}, form.value))
+            .subscribe(function (response) {
             _this.cartItems = response;
         });
     };
-    AppComponent.prototype.deleteItem = function (id) {
+    AppComponent.prototype.deleteAnItem = function (id) {
         var _this = this;
         this.cartService.deleteItem(id).subscribe(function (response) {
+            _this.cartItems = response;
+        });
+    };
+    AppComponent.prototype.updateAnItem = function (item) {
+        var _this = this;
+        this.cartService.updateItem(item).subscribe(function (response) {
             _this.cartItems = response;
         });
     };
@@ -182,12 +182,14 @@ var CartServiceService = /** @class */ (function () {
     CartServiceService.prototype.getAllItems = function () {
         return this.http.get("/api/cartitems", { responseType: "json" });
     };
-    CartServiceService.prototype.addItems = function (newID, newProduct, newPrice, newQuantity) {
-        return this.http.post("/api/cartitems", { id: newID, product: newProduct,
-            price: newPrice, quantity: newQuantity }, { responseType: "json" });
+    CartServiceService.prototype.addItems = function (newItem) {
+        return this.http.post("/api/cartitems", newItem, { responseType: "json" });
     };
     CartServiceService.prototype.deleteItem = function (id) {
-        return this.http.delete("/api/animals/" + id, { responseType: "json" });
+        return this.http.delete("/api/cartitems/" + id, { responseType: "json" });
+    };
+    CartServiceService.prototype.updateItem = function (item) {
+        return this.http.put("/api/animals/" + item.id, item, { responseType: "json" });
     };
     CartServiceService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

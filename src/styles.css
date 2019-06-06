@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background: url("https://static.hiphopdx.com/2017/07/170707-50-Cent-IG-800x600.jpg");
+    background-size: 250px;
+    width: 100%;
+}

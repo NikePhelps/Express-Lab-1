@@ -9,42 +9,40 @@ import { CartServiceService } from "./cart-service.service";
 })
 export class AppComponent {
   title = 'expresslab';
-  cartItems: any = [
-    {
-    id: 0,
-    product: "shirt",
-    price: 80,
-    quantity: 2
-    },
-    {
-        id: 1,
-        product: "jeans",
-        price: 100,
-        quantity: 1
-        },
-];
+  cartItems: any 
+  shouldBeHidden: boolean = true;
+    
+  
   constructor(private cartService: CartServiceService) {
     this.cartService.getAllItems().subscribe(response => {
       this.cartItems = response;
     });
 
   }
-
-  addNewAnimal(newID, newProduct, newPrice, newQuantity) {
-    this.cartService.addItems(newID, newProduct, newPrice, newQuantity).subscribe(response => {
-      this.cartItems = response;
-    });
+  toggleForm(index) {
+    this.cartItems[index].beingUpdated = !this.cartItems[index].beingUpdated;
+    console.log(this.cartItems[index]);
+    this.shouldBeHidden = !this.shouldBeHidden;
   }
 
-  deleteItem(id) {
+  addNewItem(form) {
+    this.cartService
+      .addItems({
+        ...form.value})
+      .subscribe(response => {
+        this.cartItems = response;
+      });
+  }
+
+  deleteAnItem(id) {
     this.cartService.deleteItem(id).subscribe(response => {
       this.cartItems = response;
     });
   }
 
-  // updateAnAnimal(newname, oldname) {
-  //   this.cartService.updateAnimal(newname, oldname).subscribe(response => {
-  //     this.cartItems = response;
-  //   });
-  // }
+  updateAnItem(item) {
+    this.cartService.updateItem(item).subscribe(response => {
+      this.cartItems = response;
+    });
+  }
 }
